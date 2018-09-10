@@ -1,8 +1,10 @@
 /*
     get, post 구현하기
     메모리 객체 사용하기
+    input validation 을 위해 Joi 패키지 설치하고 사용함.
 */
 const express = require('express');
+const Joi = require('joi');
 const app = express();
 
 // post를 사용할 때 json 포맷을 사용하기 위해 필요함.
@@ -16,6 +18,16 @@ const courses = [
 
 
 app.post('/api/courses', (req, res) => {
+    // Validation input message
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+
+    const result = Joi.validate(req.body, schema);
+    //console.log(result);
+    //return res.send(result);  // 메시지 전체 내용을 POSTMAN에서 볼 수 있음.
+    if( result.error) return res.status(400).send(result.error.details[0]);
+
     // Create the course and return the course object
     const course = {
         id: courses.length + 1,
@@ -24,6 +36,7 @@ app.post('/api/courses', (req, res) => {
     courses.push(course);
     res.send(course);
 });
+
 
 app.get('/api/courses', (req, res) => {
     // To read all the courses 
