@@ -1,5 +1,7 @@
 /*
     PUT 구현하기
+    DELeTE 구현하기
+    validate 함수 이해하고 구현하기
 */
 const express = require('express');
 const Joi = require('joi');
@@ -75,9 +77,14 @@ app.put('/api/courses/:id', (req, res) => {
 app.delete('/api/courses/:id', (req, res) => {
     // Lookup the course
     // If course not found return 404
+    const course = courses.find( c => c.id === parseInt(req.params.id));
+    if( !course ) return res.status(404).send('The course with the given ID was not found. ');
 
     // otherwise delete it
     // return the deleted object
+    const index = courses.indexOf(course);
+    courses.splice(index, 1);
+    return res.send(course);
 });
 
 
