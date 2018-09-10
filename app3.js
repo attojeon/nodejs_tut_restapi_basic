@@ -42,11 +42,10 @@ app.get('/api/courses', (req, res) => {
 
 
 app.get('/api/courses/:id', (req, res) => {
-    const courseId = req.params.id;
-
     // Lookup the course
-    // If not found, return 404
-    res.status(404).send('Course not found');
+    // If course not found return 404, 
+    const course = courses.find( c => c.id === parseInt(req.params.id));
+    if( !course ) return res.status(404).send('The course with the given ID was not found. ');
 
     // Else return the course object
     res.send(course);
